@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 
 @Import(CustomerRepository.class)
-class CustomerRepositoryTest extends AbstractDatabaseTest {
+class CustomerRepositoryIntegrationTest extends AbstractDatabaseTest {
 
     @Autowired
     private CustomerRepository repository;
