@@ -55,4 +55,28 @@ class CustomerRepositoryIntegrationTest extends AbstractDatabaseTest {
         assertThat(loadedEntity.get().getCreateDate()).isCloseTo(LocalDateTime.now(), within(1, ChronoUnit.SECONDS));
         assertThat(loadedEntity.get().getLastUpdateDate()).isCloseTo(LocalDateTime.now(), within(1, ChronoUnit.SECONDS));
     }
+
+    @Test
+    void findById_GetsNewlyCreatedCustomer() {
+        final var customerName = "Lars";
+        final var companyName = "Neusta";
+        final var customerEntity = new CustomerEntity(customerName, companyName);
+
+        final var storedEntity = repository.store(customerEntity);
+
+        assertThat(storedEntity.getId()).isNotNull();
+        assertThat(storedEntity.getName()).isEqualTo(customerName);
+        assertThat(storedEntity.getCompany()).isEqualTo(companyName);
+        assertThat(storedEntity.getCreateDate()).isCloseTo(LocalDateTime.now(), within(1, ChronoUnit.SECONDS));
+        assertThat(storedEntity.getLastUpdateDate()).isCloseTo(LocalDateTime.now(), within(1, ChronoUnit.SECONDS));
+
+        final var loadedEntity = customerJpaRepository.findById(storedEntity.getId());
+
+        assertThat(loadedEntity).isPresent();
+        assertThat(loadedEntity.get().getId()).isEqualTo(storedEntity.getId());
+        assertThat(loadedEntity.get().getName()).isEqualTo(customerName);
+        assertThat(loadedEntity.get().getCompany()).isEqualTo(companyName);
+        assertThat(loadedEntity.get().getCreateDate()).isCloseTo(LocalDateTime.now(), within(1, ChronoUnit.SECONDS));
+        assertThat(loadedEntity.get().getLastUpdateDate()).isCloseTo(LocalDateTime.now(), within(1, ChronoUnit.SECONDS));
+    }
 }
