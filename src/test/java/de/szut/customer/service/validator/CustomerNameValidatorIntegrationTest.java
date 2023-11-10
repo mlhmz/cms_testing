@@ -4,16 +4,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = {CustomerNameValidator.class})
 class CustomerNameValidatorIntegrationTest {
-    @Autowired
-    CustomerNameValidator customerNameValidator;
+    CustomerNameValidator customerNameValidator = new CustomerNameValidator();
 
     @ParameterizedTest(name = "Die Abfrage ist {1} beim Namen {0}")
     @CsvSource(value = {
