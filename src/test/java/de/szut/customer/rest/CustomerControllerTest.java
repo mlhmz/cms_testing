@@ -62,4 +62,20 @@ class CustomerControllerTest {
         this.mockMvc.perform(get("/api/" + id))
             .andExpect(status().isNotFound());
     }
+
+    @Test
+    void getExistingCustomer() throws Exception {
+        long id = 1L;
+        CustomerEntity customer = new CustomerEntity(id, "Max Mustermann", "Musterfirma");
+
+        when(customerRepositoryMock.findBy(id)).thenReturn(Optional.of(customer));
+
+        this.mockMvc.perform(get("/api/{id}", id))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("id", is(Long.toString(id))))
+            .andExpect(jsonPath("name", is(customer.getName())))
+            .andExpect(jsonPath("company", is(customer.getCompany())));
+    }
+
+
 }
