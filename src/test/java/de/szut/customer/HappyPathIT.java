@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class HappyPathIT extends AbstractIntegrationTest {
+class HappyPathIT extends AbstractIntegrationTest {
 
     @Test
     void storeNewCustomer() throws Exception {
@@ -48,5 +48,18 @@ public class HappyPathIT extends AbstractIntegrationTest {
         assertThat(loadedEntity.get().getCompany()).isEqualTo("Neusta");
         assertThat(loadedEntity.get().getCreateDate()).isCloseTo(LocalDateTime.now(), within(1, ChronoUnit.SECONDS));
         assertThat(loadedEntity.get().getLastUpdateDate()).isCloseTo(LocalDateTime.now(), within(1, ChronoUnit.SECONDS));
+    }
+
+    @Test
+    void getCustomer() throws Exception {
+        CustomerEntity customerEntity = new CustomerEntity("Max Mustermann", "Musterfirma");
+
+        CustomerEntity savedEntity = customerJpaRepository.save(customerEntity);
+
+        this.mockMvc.perform(get("/api/{id}", savedEntity.getId()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("id", is(savedEntity.getId().toString())))
+            .andExpect(jsonPath("name", is("Max Mustermann")))
+            .andExpect(jsonPath("company", is("Musterfirma")));
     }
 }
